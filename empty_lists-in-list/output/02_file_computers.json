@@ -1,0 +1,7 @@
+[
+    {
+        "dn": "CN=Computer-01,OU=Computers,OU=UNIVERSUM,DC=universum,DC=local",
+        "new-test": "json",
+        "new-test1": "saved"
+    }
+]
