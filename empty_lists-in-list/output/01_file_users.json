@@ -1,0 +1,7 @@
+[
+    {
+        "dn": "CN=User-01,OU=Users,OU=UNIVERSUM,DC=universum,DC=local",
+        "new-test": "json",
+        "new-test1": "saved"
+    }
+]
