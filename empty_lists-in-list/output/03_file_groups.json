@@ -1,0 +1,7 @@
+[
+    {
+        "dn": "CN=Group-rw,OU=Groups,OU=UNIVERSUM,DC=universum,DC=local",
+        "new-test": "json",
+        "new-test1": "saved"
+    }
+]
