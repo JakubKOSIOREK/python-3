@@ -3,4 +3,5 @@ A repository of python programming tips
 
 CONTENT:
 
+comparing --> folder containing examples of comparisons
 empty_lists-in-list --> Creating empty lists in a list, an example for creating lists to be saved in separate json files.
