@@ -106,19 +106,20 @@ while True:
     if not line:
         break
 
-print()
-print('Masked list:')
 hash_store.sort()
 hash_store = list(dict.fromkeys(hash_store)) # removes duplicates, using dictionary (in dictionary we cannot have duplicates)
 for item in hash_store:
     f_hashes.writelines(f'{item}\n')
-    print(f' {item}')
-
+#--------------------------------------------------------------------------------------
+# OUTPUT TO CONSOLE
+#--------------------------------------------------------------------------------------
 print()
-print('Script generated two files:')
-print(f' - file with masked users, files and words: {f_masked.name}')
-print(f' - file with hashes:                        {f_hashes.name}')
-
+print('\033[0;32mENCODING COMPLETE.\033[0m\n')
+print(f'\033[0;30m - encoded file:        \033[0m\033[0;33m{f_masked.name}\033[0m')
+print(f'\033[0;30m - hash database file:  \033[0m\033[0;33m{f_hashes.name}\033[0m')
+#--------------------------------------------------------------------------------------
+# CLOSING FILES
+#--------------------------------------------------------------------------------------
 f_masked.close()
 f_hashes.close()
 f_to_mask.close()
