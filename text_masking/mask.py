@@ -10,18 +10,24 @@ root_path = os.path.dirname(os.path.abspath(__file__))
 input_dir = 'input_data'
 output_dir = 'output_data'
 input_file_name = '20230312-test_file.csv'
+
 extensions_list = ['png', 'doc', 'jpg', 'log', 'csv']
 sensitive_words_list = ['Dell','Instrumentation']
+hash_store = []
 
 #--------------------------------------------------------------------------------------
 # FUNCTIONS
 #--------------------------------------------------------------------------------------
 def mask_method(x): return (f'MASKED_HASH({hashlib.md5(x.encode()).hexdigest()})')
 
+def to_hash_store(unmasked ,masked ,mask_type):
+    hash_store.append(f'"{mask_type}_{masked}","{unmasked}"')
+
 def user_masking(x):
     if x.find("C:\\Users") != -1:
         u_name =line.split("\\")[2]               # split line item by '\\' delimiter, user name is always at [2] position
         u_name_masked = mask_method(u_name)
+        to_hash_store(u_name, u_name_masked, 'USER')
         return x.replace(f'\\{u_name}\\', f'\\USER_{u_name_masked}\\')# 
     else:
         return x
@@ -35,6 +41,7 @@ def file_name_masking(x, ext):
         else:
             f_name = x[0 : ext_pos]
         f_name_masked = mask_method(f_name)
+        to_hash_store(f_name, f_name_masked, 'FILE')
         return x.replace(f_name, f'FILE_{f_name_masked}')
     else:
         return x
@@ -42,6 +49,7 @@ def file_name_masking(x, ext):
 def word_masking(x, word):
     if x.find(f'{word}') != -1:
         s_word_masked = mask_method(word)
+        to_hash_store(word, s_word_masked, 'WORD')
         return x.replace(word, f'WORD_{s_word_masked}')
     else:
         return x
@@ -57,8 +65,12 @@ pattern = '[\w-]+?(?=\.)' # match the file name with the specific pattern
 f_name = re.search(pattern, inf_path)
 f_name = f_name.group()
 outf_path = f'{root_path}/{output_dir}'
+
 f_masked = f'{outf_path}/{f_name}_MASKED.csv'
 f_masked = open(f_masked, 'w', encoding='UTF8')
+
+f_hashes = f'{outf_path}/{f_name}_HASHES.csv'
+f_hashes = open(f_hashes, 'w',encoding='UTF8')
 #--------------------------------------------------------------------------------------
 # MAIN CODE
 #--------------------------------------------------------------------------------------
@@ -94,5 +106,19 @@ while True:
     if not line:
         break
 
+print()
+print('Masked list:')
+hash_store.sort()
+hash_store = list(dict.fromkeys(hash_store)) # removes duplicates, using dictionary (in dictionary we cannot have duplicates)
+for item in hash_store:
+    f_hashes.writelines(f'{item}\n')
+    print(f' {item}')
+
+print()
+print('Script generated two files:')
+print(f' - file with masked users, files and words: {f_masked.name}')
+print(f' - file with hashes:                        {f_hashes.name}')
+
 f_masked.close()
+f_hashes.close()
 f_to_mask.close()
